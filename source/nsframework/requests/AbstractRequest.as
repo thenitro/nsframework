@@ -1,5 +1,6 @@
 package nsframework.requests {
     import flash.errors.IllegalOperationError;
+    import flash.net.URLRequest;
 
     import npooling.IReusable;
 
@@ -9,31 +10,32 @@ package nsframework.requests {
 		protected var _server:Server;
 
 		public function AbstractRequest(pServer:Server) {
-
+            _server = pServer;
 		};
 		
 		public final function get server():Server {
 			return _server;
 		};
 
-		public function get needSync():Boolean {
-			throw new IllegalOperationError(this + '.needSync: must be overriden!');
-			return false;
-		};
-		
-		public function get reflection():Class {
-			throw new IllegalOperationError(this + '.reflection: must be overriden!');
-			return null;
-		};
-		
-		public function get type():String {
-			throw new IllegalOperationError(this + '.type: must be overriden!');
-			return null;
+        public function get reflection():Class {
+            throw new IllegalOperationError(this + '.reflection: must be overriden!');
+            return null;
+        };
+
+        public function get type():String {
+            throw new IllegalOperationError(this + '.type: must be overriden!');
+            return null;
+        };
+
+        public function get needSync():Boolean {
+            throw new IllegalOperationError(this + '.needSync: must be overriden!');
+            return false;
+
 		};
 
 		public final function send():void {
-			if (_server.online && needSync) {
-				_server.send(this);
+			if (needSync) {
+                _server.send(generateRequest());
 			} else {
                 runOffline();
             }
@@ -50,5 +52,9 @@ package nsframework.requests {
 		protected function runOffline():void {
 
 		};
+
+        protected function generateRequest():URLRequest {
+            return null;
+        };
 	}
 }

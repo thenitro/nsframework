@@ -1,9 +1,8 @@
 package nsframework {
     import flash.events.IOErrorEvent;
+    import flash.net.URLRequest;
 
     import nsframework.events.AbstractServerEvent;
-
-    import nsframework.requests.AbstractRequest;
 
     import starling.events.EventDispatcher;
 
@@ -23,7 +22,7 @@ package nsframework {
 		};
 
         public function registerEvent(pEvent:Class):void {
-            _events[pEvent.ID] = pEvent;
+            _events[pEvent.TYPE] = pEvent;
         };
 
 		public function connect(pURL:String):void {
@@ -38,12 +37,15 @@ package nsframework {
 			}
 			
 			for each (var event:AbstractServerEvent in pEvents) {
-				dispatchEventWith(event.id, false, event);
+				dispatchEventWith(event.type, false, event);
 			}
 		};
 		
-		public function send(pRequest:AbstractRequest):void {
-		};
+		public function send(pRequest:URLRequest):void {
+            if (!online) {
+                dispatchEventWith(NO_CONNECTION);
+            }
+        };
 		
 		private function connected():void {	
 			dispatchEventWith(CONNECTED);

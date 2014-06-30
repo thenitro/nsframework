@@ -13,8 +13,8 @@ package nsframework.events {
             throw new IllegalOperationError(this + '.reflection: must be overriden!');
         };
 		
-		public function get id():String {
-			throw new IllegalOperationError(this + '.id: must be overriden!');
+		public function get type():String {
+			throw new IllegalOperationError(this + '.type: must be overriden!');
 		};
 		
 		public function update(pData:Object):void {
