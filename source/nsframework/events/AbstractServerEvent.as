@@ -22,7 +22,7 @@ package nsframework.events {
 		};
 
         public function poolPrepare():void {
-            
+
         };
 
         public function dispose():void {

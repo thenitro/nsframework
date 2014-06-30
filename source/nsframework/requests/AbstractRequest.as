@@ -6,9 +6,9 @@ package nsframework.requests {
     import nsframework.Server;
 
     public class AbstractRequest implements IReusable {
-		private var _server:Server;
+		protected var _server:Server;
 
-		public function AbstractRequest() {
+		public function AbstractRequest(pServer:Server) {
 
 		};
 		
