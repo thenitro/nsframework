@@ -7,7 +7,7 @@ package nsframework {
 
     import starling.events.EventDispatcher;
 
-    public final class Server extends EventDispatcher {
+    public class Server extends EventDispatcher {
 		public static const CONNECTED:String     = 'CONNECTED_EVENT';
 		public static const NO_CONNECTION:String = 'NO_CONNECTION_EVENT';
 
