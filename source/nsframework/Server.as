@@ -51,6 +51,8 @@ package nsframework {
 		
 		private function ioErrorEventHandler(pEvent:IOErrorEvent):void {
 			_online = false;
+
+            dispatchEventWith(NO_CONNECTION);
 		};
 	};
 }
