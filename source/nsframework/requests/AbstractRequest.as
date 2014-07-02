@@ -1,4 +1,6 @@
 package nsframework.requests {
+    import com.enpodcast.global.net.events.LoginEvent;
+
     import flash.errors.IllegalOperationError;
     import flash.net.URLRequest;
 
@@ -35,6 +37,11 @@ package nsframework.requests {
 
 		public final function send():void {
 			if (needSync) {
+                CONFIG::DEBUG {
+                    runOffline();
+                    return;
+                }
+
                 _server.send(generateRequest());
 			} else {
                 runOffline();
@@ -50,7 +57,6 @@ package nsframework.requests {
 		};
 		
 		protected function runOffline():void {
-
 		};
 
         protected function generateRequest():URLRequest {

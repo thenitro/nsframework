@@ -15,6 +15,8 @@ package nsframework {
 
 		public function Server() {
 			super();
+
+            _events = {};
 		};
 		
 		public function get online():Boolean {
@@ -47,7 +49,9 @@ package nsframework {
             }
         };
 		
-		private function connected():void {	
+		private function connected():void {
+            _online = true;
+
 			dispatchEventWith(CONNECTED);
 		};
 		
