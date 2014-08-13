@@ -1,5 +1,9 @@
 package nsframework {
+    import flash.events.Event;
+    import flash.events.HTTPStatusEvent;
     import flash.events.IOErrorEvent;
+    import flash.events.SecurityErrorEvent;
+    import flash.net.URLLoader;
     import flash.net.URLRequest;
 
     import nsframework.events.AbstractServerEvent;
@@ -7,30 +11,27 @@ package nsframework {
     import starling.events.EventDispatcher;
 
     public class Server extends EventDispatcher {
-		public static const CONNECTED:String     = 'CONNECTED_EVENT';
 		public static const NO_CONNECTION:String = 'NO_CONNECTION_EVENT';
 
 		private var _events:Object;
-		private var _online:Boolean;
+        private var _url:String;
 
 		public function Server() {
 			super();
 
             _events = {};
 		};
-		
-		public function get online():Boolean {
-			return _online;
-		};
+
+        public function get url():String {
+            return _url;
+        };
 
         public function registerEvent(pEvent:Class):void {
             _events[pEvent.TYPE] = pEvent;
         };
 
 		public function connect(pURL:String):void {
-            CONFIG::DEBUG {
-                connected();
-            }
+            _url = pURL;
 		};
 		
 		public function process(pEvents:Array):void {
@@ -43,22 +44,53 @@ package nsframework {
 			}
 		};
 		
-		public function send(pRequest:URLRequest):void {
-            if (!online) {
-                dispatchEventWith(NO_CONNECTION);
+		public function send(pLoader:URLLoader, pRequest:URLRequest):void {
+            trace('Server.send:');
+
+            try {
+                pLoader.addEventListener(Event.COMPLETE,
+                                         loaderCompleteEventHandler);
+                pLoader.addEventListener(HTTPStatusEvent.HTTP_STATUS,
+                                         httpStatusEventHandler);
+                pLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,
+                                         securityErrorEventHandler);
+                pLoader.addEventListener(IOErrorEvent.IO_ERROR,
+                                         ioErrorEventHandler);
+
+                pLoader.load(pRequest);
+            } catch (error:Error) {
+                trace('Server.send:', error);
+                disconnection();
             }
         };
-		
-		private function connected():void {
-            _online = true;
 
-			dispatchEventWith(CONNECTED);
-		};
+        private function loaderCompleteEventHandler(pEvent:Event):void {
+        };
+
+        private function httpStatusEventHandler(pEvent:HTTPStatusEvent):void {
+            if (pEvent.status == 0) {
+                disconnection();
+                return;
+            }
+
+            if (pEvent.status == 200) {
+                return;
+            }
+
+            trace('Server.httpStatusEventHandler:', pEvent.status, pEvent.toString());
+        };
+
+        private function securityErrorEventHandler(pEvent:SecurityErrorEvent):void {
+            trace('Server.securityErrorHandler:', pEvent.errorID, pEvent.text);
+            disconnection();
+        };
 		
 		private function ioErrorEventHandler(pEvent:IOErrorEvent):void {
-			_online = false;
-
-            dispatchEventWith(NO_CONNECTION);
+            disconnection();
 		};
+
+        private function disconnection():void {
+            dispatchEventWith(NO_CONNECTION);
+        };
 	};
 }

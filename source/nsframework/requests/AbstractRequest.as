@@ -1,21 +1,27 @@
 package nsframework.requests {
-    import com.enpodcast.global.net.events.LoginEvent;
-
     import flash.errors.IllegalOperationError;
+    import flash.net.URLLoader;
     import flash.net.URLRequest;
+    import flash.net.URLVariables;
 
     import npooling.IReusable;
 
     import nsframework.Server;
 
-    public class AbstractRequest implements IReusable {
+    import starling.events.EventDispatcher;
+
+    public class AbstractRequest extends  EventDispatcher implements IReusable {
+        public static const RESPONCE:String = 'responce_event';
+
 		protected var _server:Server;
+        protected var _data:Object;
 
         private var _disposed:Boolean;
 
 		public function AbstractRequest(pServer:Server) {
             _server = pServer;
-		};
+            _data   = {};
+        };
 
         public function get reflection():Class {
             throw new IllegalOperationError(this + '.reflection: must be overriden!');
@@ -43,20 +49,18 @@ package nsframework.requests {
 
 		public final function send():void {
 			if (needSync) {
-                CONFIG::DEBUG {
+                CONFIG::NO_SERVER {
                     runOffline();
                     return;
                 }
 
-                _server.send(generateRequest());
+                _server.send(generateLoader(), generateRequest());
 			} else {
                 runOffline();
             }
 		};
-		
-		public function poolPrepare():void {
 
-		};
+		public function poolPrepare():void {};
 		
 		public function dispose():void {
 			_disposed = true;
@@ -65,8 +69,16 @@ package nsframework.requests {
 		protected function runOffline():void {
 		};
 
+        protected function generateLoader():URLLoader {
+            return null;
+        };
+
         protected function generateRequest():URLRequest {
             return null;
+        };
+
+        protected function responce(pData:Object):void {
+            dispatchEventWith(RESPONCE, false, pData);
         };
 	}
 }
