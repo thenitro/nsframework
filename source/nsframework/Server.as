@@ -45,7 +45,7 @@ package nsframework {
 		};
 		
 		public function send(pLoader:URLLoader, pRequest:URLRequest):void {
-            trace('Server.send:');
+            trace('Server.send:', pLoader, pRequest);
 
             try {
                 pLoader.addEventListener(Event.COMPLETE,

@@ -4,6 +4,8 @@ package nsframework.requests {
     import flash.net.URLRequest;
     import flash.net.URLVariables;
 
+    import ngine.utils.ObjectUtils;
+
     import npooling.IReusable;
 
     import nsframework.Server;
