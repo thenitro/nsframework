@@ -79,7 +79,7 @@ package nsframework.requests {
             return null;
         };
 
-        protected function responce(pData:Object):void {
+        protected function response(pData:Object):void {
             dispatchEventWith(RESPONCE, false, pData);
         };
 	}
