@@ -92,6 +92,7 @@ package nsframework {
         };
 		
 		private function ioErrorEventHandler(pEvent:IOErrorEvent):void {
+            trace('Server.ioErrorEventHandler:', pEvent.errorID, pEvent.text);
             disconnection();
 		};
 
