@@ -43,9 +43,6 @@ package nsframework.requests {
         private function loaderCompleteEventHandler(pEvent:Event):void {
             var data:Object = JSON.parse((pEvent.target as URLLoader).data);
 
-            trace('PostRequest.loaderCompleteEventHandler:');
-            ObjectUtils.repr(data, true);
-
             response(data);
         };
     };
