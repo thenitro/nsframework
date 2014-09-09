@@ -13,6 +13,9 @@ package nsframework {
     public class Server extends EventDispatcher {
 		public static const NO_CONNECTION:String = 'NO_CONNECTION_EVENT';
 
+		public static const REQUEST_SENDED:String    = 'request_sended';
+		public static const REQUEST_RESPONDED:String = 'request_responded';
+
 		private var _events:Object;
         private var _url:String;
 
@@ -58,6 +61,8 @@ package nsframework {
                                          ioErrorEventHandler);
 
                 pLoader.load(pRequest);
+
+                dispatchEventWith(REQUEST_SENDED);
             } catch (error:Error) {
                 trace('Server.send:', error);
                 disconnection();
@@ -65,6 +70,7 @@ package nsframework {
         };
 
         private function loaderCompleteEventHandler(pEvent:Event):void {
+            dispatchEventWith(REQUEST_RESPONDED);
         };
 
         private function httpStatusEventHandler(pEvent:HTTPStatusEvent):void {
@@ -90,7 +96,7 @@ package nsframework {
 		};
 
         private function disconnection():void {
-            dispatchEventWith(NO_CONNECTION);
+            dispatchEventWith(REQUEST_RESPONDED);
         };
 	};
 }
