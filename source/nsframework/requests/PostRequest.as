@@ -6,8 +6,6 @@ package nsframework.requests {
     import flash.net.URLRequestMethod;
     import flash.net.URLVariables;
 
-    import ngine.utils.ObjectUtils;
-
     import nsframework.Server;
 
     public class PostRequest extends AbstractRequest {

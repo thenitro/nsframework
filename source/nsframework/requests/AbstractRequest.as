@@ -13,7 +13,7 @@ package nsframework.requests {
     import starling.events.EventDispatcher;
 
     public class AbstractRequest extends  EventDispatcher implements IReusable {
-        public static const RESPONCE:String = 'responce_event';
+        public static const RESPONSE:String = 'response_event';
 
 		protected var _server:Server;
         protected var _data:Object;
@@ -80,7 +80,7 @@ package nsframework.requests {
         };
 
         protected function response(pData:Object):void {
-            dispatchEventWith(RESPONCE, false, pData);
+            dispatchEventWith(RESPONSE, false, pData);
         };
 	}
 }
