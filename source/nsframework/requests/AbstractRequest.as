@@ -2,9 +2,6 @@ package nsframework.requests {
     import flash.errors.IllegalOperationError;
     import flash.net.URLLoader;
     import flash.net.URLRequest;
-    import flash.net.URLVariables;
-
-    import ngine.utils.ObjectUtils;
 
     import npooling.IReusable;
 
