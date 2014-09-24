@@ -98,6 +98,7 @@ package nsframework {
 
         private function disconnection():void {
             dispatchEventWith(REQUEST_RESPONDED);
+            dispatchEventWith(NO_CONNECTION);
         };
 	};
 }
