@@ -11,6 +11,7 @@ package nsframework.requests {
 
     public class AbstractRequest extends  EventDispatcher implements IReusable {
         public static const RESPONSE:String = 'response_event';
+        public static const FAIL:String     = 'fail_event';
 
 		protected var _server:Server;
         protected var _data:Object;
@@ -35,7 +36,6 @@ package nsframework.requests {
         public function get needSync():Boolean {
             throw new IllegalOperationError(this + '.needSync: must be overriden!');
             return false;
-
 		};
 
         public function get disposed():Boolean {
@@ -46,6 +46,14 @@ package nsframework.requests {
             return _server;
         };
 
+        public function get data():Object {
+            return _data;
+        };
+
+        public function setData(pData:Object):void {
+            _data = pData;
+        };
+
 		public final function send():void {
 			if (needSync) {
                 CONFIG::NO_SERVER {
@@ -53,7 +61,7 @@ package nsframework.requests {
                     return;
                 }
 
-                _server.send(generateLoader(), generateRequest());
+                _server.send(generateLoader(), generateRequest(), this);
 			} else {
                 runOffline();
             }

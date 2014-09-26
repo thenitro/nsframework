@@ -7,6 +7,7 @@ package nsframework {
     import flash.net.URLRequest;
 
     import nsframework.events.AbstractServerEvent;
+    import nsframework.requests.AbstractRequest;
 
     import starling.events.EventDispatcher;
 
@@ -15,6 +16,7 @@ package nsframework {
 
 		public static const REQUEST_SENDED:String    = 'request_sended';
 		public static const REQUEST_RESPONDED:String = 'request_responded';
+        public static const REQUEST_FAILED:String    = 'request_fail';
 
 		private var _events:Object;
         private var _url:String;
@@ -22,7 +24,7 @@ package nsframework {
 		public function Server() {
 			super();
 
-            _events = {};
+            _events    = {};
 		};
 
         public function get url():String {
@@ -47,8 +49,11 @@ package nsframework {
 			}
 		};
 		
-		public function send(pLoader:URLLoader, pRequest:URLRequest):void {
+		public function send(pLoader:URLLoader, pRequest:URLRequest, pAbstract:AbstractRequest):void {
             trace('Server.send:', pLoader, pRequest);
+
+            pAbstract.addEventListener(AbstractRequest.FAIL,
+                                       abstractRequestFailEventHandler);
 
             try {
                 pLoader.addEventListener(Event.COMPLETE,
@@ -95,6 +100,10 @@ package nsframework {
             trace('Server.ioErrorEventHandler:', pEvent.errorID, pEvent.text);
             disconnection();
 		};
+
+        private function abstractRequestFailEventHandler(pEvent:starling.events.Event):void {
+            dispatchEventWith(REQUEST_FAILED);
+        };
 
         private function disconnection():void {
             dispatchEventWith(REQUEST_RESPONDED);
