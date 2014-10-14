@@ -39,6 +39,9 @@ package nsframework.requests {
         };
 
         private function loaderCompleteEventHandler(pEvent:Event):void {
+            var target:URLLoader = pEvent.target as URLLoader;
+                target.removeEventListener(Event.COMPLETE, loaderCompleteEventHandler);
+
             var data:Object = JSON.parse((pEvent.target as URLLoader).data);
 
             response(data);

@@ -18,13 +18,14 @@ package nsframework {
 		public static const REQUEST_RESPONDED:String = 'request_responded';
         public static const REQUEST_FAILED:String    = 'request_fail';
 
-		private var _events:Object;
+		protected var _events:Object;
+
         private var _url:String;
 
 		public function Server() {
 			super();
 
-            _events    = {};
+            _events = {};
 		};
 
         public function get url():String {
@@ -49,7 +50,8 @@ package nsframework {
 			}
 		};
 		
-		public function send(pLoader:URLLoader, pRequest:URLRequest, pAbstract:AbstractRequest):void {
+		public function send(pLoader:URLLoader, pRequest:URLRequest,
+                             pAbstract:AbstractRequest):void {
             trace('Server.send:', pLoader, pRequest);
 
             pAbstract.addEventListener(AbstractRequest.FAIL,
