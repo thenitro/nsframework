@@ -3,6 +3,8 @@ package nsframework.requests {
     import flash.net.URLLoader;
     import flash.net.URLRequest;
 
+    import ngine.storage.LocalStorage;
+
     import npooling.IReusable;
 
     import nsframework.Server;
@@ -14,13 +16,15 @@ package nsframework.requests {
         public static const FAIL:String     = 'fail_event';
 
 		protected var _server:Server;
-        protected var _data:Object;
+
+        private var _storage:LocalStorage = LocalStorage.getInstance();
 
         private var _disposed:Boolean;
+        private var _cache:Boolean;
 
-		public function AbstractRequest(pServer:Server) {
+		public function AbstractRequest(pServer:Server, pCacheResponse:Boolean) {
             _server = pServer;
-            _data   = {};
+            _cache  = pCacheResponse;
         };
 
         public function get reflection():Class {
@@ -46,12 +50,16 @@ package nsframework.requests {
             return _server;
         };
 
-        public function get data():Object {
-            return _data;
+        public final function get storage():LocalStorage {
+            return _storage;
         };
 
-        public function setData(pData:Object):void {
-            _data = pData;
+        public function get key():String {
+            return _server.url;
+        };
+
+        public function get cacheResponse():Boolean {
+            return _cache;
         };
 
 		public final function send():void {
@@ -74,6 +82,7 @@ package nsframework.requests {
 		};
 		
 		protected function runOffline():void {
+            responseCached();
 		};
 
         protected function generateLoader():URLLoader {
@@ -85,7 +94,24 @@ package nsframework.requests {
         };
 
         protected function response(pData:Object):void {
+            if (_cache) {
+                _storage.save(key, pData);
+            }
+
             dispatchEventWith(RESPONSE, false, pData);
+        };
+
+        private function responseCached():void {
+            if (!_cache) {
+                return;
+            }
+
+            var cachedResult:Object = _storage.load(key);
+            if (!cachedResult) {
+                return;
+            }
+
+            dispatchEventWith(RESPONSE, false, cachedResult);
         };
 	}
 }

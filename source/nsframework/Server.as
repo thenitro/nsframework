@@ -52,8 +52,6 @@ package nsframework {
 		
 		public function send(pLoader:URLLoader, pRequest:URLRequest,
                              pAbstract:AbstractRequest):void {
-            trace('Server.send:', pLoader, pRequest);
-
             pAbstract.addEventListener(AbstractRequest.FAIL,
                                        abstractRequestFailEventHandler);
 
